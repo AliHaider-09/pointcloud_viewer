@@ -1,0 +1,359 @@
+/* Potree theme — white glass, black text, Poppins.
+ * Consumers can override any of the variables below in their own stylesheet
+ * (loaded after this one) to rebrand without forking the entire file. Example:
+ *
+ *   :root {
+ *     --potree-accent-color: #10b981;
+ *     --potree-font-family: 'Inter', system-ui, sans-serif;
+ *     --potree-sidebar-bg: rgba(15, 23, 42, 0.85);
+ *     --potree-text-color: #f8fafc;
+ *   }
+ */
+
+:root {
+	/* Brand / accent */
+	--potree-accent-color: #3B82F6;
+	--potree-accent-tint-soft: rgba(59, 130, 246, 0.06);
+	--potree-accent-tint-medium: rgba(59, 130, 246, 0.15);
+	--potree-accent-tint-strong: rgba(59, 130, 246, 0.4);
+	--potree-accent-hover-bg: #e0e7ff;
+
+	/* Surfaces */
+	--potree-sidebar-bg: rgba(255, 255, 255, 0.85);
+	--potree-sidebar-blur: 16px;
+	--potree-surface: #fff;
+	--potree-input-bg: #f8fafc;
+	--potree-button-bg: #f1f5f9;
+
+	/* Text + borders */
+	--potree-text-color: #000;
+	--potree-border-color: rgba(0, 0, 0, 0.1);
+	--potree-border-strong: #e2e8f0;
+	--potree-row-divider: rgba(0, 0, 0, 0.06);
+
+	/* Scrollbar */
+	--potree-scrollbar-thumb: rgba(0, 0, 0, 0.15);
+	--potree-scrollbar-thumb-hover: rgba(0, 0, 0, 0.25);
+	--potree-scrollbar-track-bg: rgba(0, 0, 0, 0.08);
+
+	/* Typography */
+	--potree-font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ============================================
+   SIDEBAR
+   ============================================ */
+
+#potree_sidebar {
+	background: var(--potree-sidebar-bg) !important;
+	backdrop-filter: blur(var(--potree-sidebar-blur)) !important;
+	-webkit-backdrop-filter: blur(var(--potree-sidebar-blur)) !important;
+	font-family: var(--potree-font-family) !important;
+	font-size: 13px !important;
+	color: var(--potree-text-color) !important;
+	height: 100vh !important;
+	overflow-y: auto !important;
+	overflow-x: hidden !important;
+	box-sizing: border-box !important;
+	padding: 16px !important;
+	border-right: 1px solid var(--potree-border-color) !important;
+	box-shadow: 4px 0 16px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ============================================
+   SECTION TITLES
+   ============================================ */
+
+.subsection {
+	font-family: var(--potree-font-family) !important;
+	font-size: 11px !important;
+	font-weight: 800 !important;
+	text-transform: uppercase !important;
+	color: var(--potree-text-color) !important;
+	letter-spacing: 1.5px !important;
+	padding: 16px 0 8px 0 !important;
+	margin-top: 4px !important;
+}
+
+.subsection::before,
+.subsection::after {
+	background-color: var(--potree-border-color) !important;
+}
+
+.subsection_panel {
+	margin: 0 0 8px 0 !important;
+}
+
+/* ============================================
+   CONTROLS & INPUTS
+   ============================================ */
+
+#potree_sidebar select,
+#potree_sidebar_main select {
+	background-color: var(--potree-input-bg) !important;
+	color: var(--potree-text-color) !important;
+	border: 1px solid var(--potree-border-strong) !important;
+	border-radius: 4px !important;
+	padding: 5px 8px !important;
+	font-family: var(--potree-font-family) !important;
+	font-size: 12px !important;
+	outline: none !important;
+	transition: border-color 0.15s ease !important;
+}
+
+#potree_sidebar select:hover,
+#potree_sidebar_main select:hover {
+	border-color: var(--potree-accent-color) !important;
+}
+
+#potree_sidebar select:focus,
+#potree_sidebar_main select:focus {
+	border-color: var(--potree-accent-color) !important;
+	box-shadow: 0 0 0 2px var(--potree-accent-tint-medium) !important;
+}
+
+#potree_sidebar select option,
+#potree_sidebar_main select option {
+	background-color: var(--potree-surface) !important;
+	color: var(--potree-text-color) !important;
+}
+
+#potree_sidebar input[type="text"],
+#potree_sidebar input[type="number"],
+#potree_sidebar_main input[type="text"],
+#potree_sidebar_main input[type="number"] {
+	background-color: var(--potree-input-bg) !important;
+	color: var(--potree-text-color) !important;
+	border: 1px solid var(--potree-border-strong) !important;
+	border-radius: 4px !important;
+	padding: 4px 8px !important;
+	font-family: var(--potree-font-family) !important;
+	font-size: 12px !important;
+	outline: none !important;
+}
+
+#potree_sidebar input[type="checkbox"],
+#potree_sidebar_main input[type="checkbox"] {
+	accent-color: var(--potree-accent-color) !important;
+	width: 15px !important;
+	height: 15px !important;
+	cursor: pointer !important;
+}
+
+#potree_sidebar input[type="range"],
+#potree_sidebar_main input[type="range"] {
+	accent-color: var(--potree-accent-color) !important;
+	height: 4px !important;
+	cursor: pointer !important;
+}
+
+#potree_sidebar input[type="button"],
+#potree_sidebar_main input[type="button"] {
+	background: var(--potree-button-bg) !important;
+	color: var(--potree-text-color) !important;
+	border: 1px solid var(--potree-border-strong) !important;
+	border-radius: 4px !important;
+	padding: 4px 10px !important;
+	font-family: var(--potree-font-family) !important;
+	font-size: 12px !important;
+	font-weight: 700 !important;
+	cursor: pointer !important;
+	transition: all 0.15s ease !important;
+}
+
+#potree_sidebar input[type="button"]:hover,
+#potree_sidebar_main input[type="button"]:hover {
+	background: var(--potree-accent-hover-bg) !important;
+	border-color: var(--potree-accent-color) !important;
+}
+
+/* ============================================
+   SECTION ICON BUTTONS
+   ============================================ */
+
+.potree_sidebar_section_button {
+	opacity: 0.7 !important;
+	transition: all 0.15s ease !important;
+}
+
+.potree_sidebar_section_button:hover {
+	opacity: 1 !important;
+}
+
+.potree_sidebar_button:hover {
+	opacity: 1 !important;
+}
+
+/* ============================================
+   GRADIENT BUTTONS
+   ============================================ */
+
+.potree_gradient_button {
+	border-radius: 3px !important;
+	border: 1px solid var(--potree-border-strong) !important;
+	cursor: pointer !important;
+	transition: all 0.15s ease !important;
+}
+
+.potree_gradient_button:hover {
+	filter: brightness(110%) !important;
+	border-color: var(--potree-accent-color) !important;
+}
+
+/* ============================================
+   TABLES
+   ============================================ */
+
+#potree_sidebar table,
+#potree_sidebar_main table {
+	color: var(--potree-text-color) !important;
+	width: 100%;
+}
+
+#potree_sidebar td,
+#potree_sidebar_main td {
+	color: var(--potree-text-color) !important;
+	font-family: var(--potree-font-family) !important;
+	font-size: 12px !important;
+	padding: 3px 8px 3px 0 !important;
+	border-bottom: 1px solid var(--potree-row-divider) !important;
+}
+
+#potree_sidebar td:nth-child(2),
+#potree_sidebar_main td:nth-child(2) {
+	color: var(--potree-text-color) !important;
+	font-weight: 700 !important;
+	font-variant-numeric: tabular-nums !important;
+}
+
+#potree_sidebar tr:hover,
+#potree_sidebar_main tr:hover {
+	background-color: var(--potree-accent-tint-soft) !important;
+}
+
+/* ============================================
+   LABELS & TEXT
+   ============================================ */
+
+#potree_sidebar label,
+#potree_sidebar span,
+#potree_sidebar_main label,
+#potree_sidebar_main span {
+	font-family: var(--potree-font-family) !important;
+	color: var(--potree-text-color) !important;
+}
+
+sidebarlabel,
+.sidebarlabel {
+	color: var(--potree-text-color) !important;
+	font-size: 12px !important;
+	font-weight: 700 !important;
+	white-space: nowrap !important;
+}
+
+/* ============================================
+   TOOLBAR
+   ============================================ */
+
+#potree_toolbar {
+	background: var(--potree-sidebar-bg) !important;
+	backdrop-filter: blur(var(--potree-sidebar-blur)) !important;
+	-webkit-backdrop-filter: blur(var(--potree-sidebar-blur)) !important;
+	color: var(--potree-text-color) !important;
+	border-radius: 0 0 8px 8px !important;
+	border: 1px solid var(--potree-border-color) !important;
+	border-top: none !important;
+	box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
+}
+
+.potree_toolbar_label {
+	color: var(--potree-text-color) !important;
+	font-size: 11px !important;
+	text-transform: uppercase !important;
+	letter-spacing: 1px !important;
+	font-weight: 800 !important;
+}
+
+.potree_toolbar_separator {
+	background: var(--potree-border-color) !important;
+}
+
+.potree_toolbar_button:hover {
+	filter: brightness(90%) !important;
+}
+
+.potree_toolbar_dropdown_button:hover {
+	border: 1px solid var(--potree-accent-color) !important;
+}
+
+.potree_toolbar_gradient_button {
+	border-radius: 3px !important;
+	border: 1px solid var(--potree-border-strong) !important;
+	cursor: pointer !important;
+	transition: all 0.15s ease !important;
+}
+
+.potree_toolbar_gradient_button:hover {
+	filter: brightness(110%) !important;
+	border-color: var(--potree-accent-color) !important;
+}
+
+#potree_toolbar select {
+	background-color: var(--potree-input-bg) !important;
+	color: var(--potree-text-color) !important;
+	border: 1px solid var(--potree-border-strong) !important;
+	border-radius: 4px !important;
+	font-size: 11px !important;
+	outline: none !important;
+}
+
+#potree_toolbar select option {
+	background-color: var(--potree-surface) !important;
+	color: var(--potree-text-color) !important;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+#potree_sidebar_main::-webkit-scrollbar {
+	width: 5px;
+}
+
+#potree_sidebar_main::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+#potree_sidebar_main::-webkit-scrollbar-thumb {
+	background: var(--potree-scrollbar-thumb);
+	border-radius: 4px;
+}
+
+#potree_sidebar_main::-webkit-scrollbar-thumb:hover {
+	background: var(--potree-scrollbar-thumb-hover);
+}
+
+/* ============================================
+   RANGE SLIDER
+   ============================================ */
+
+.range-slider-selected {
+	background: var(--potree-accent-tint-strong) !important;
+}
+
+.range-slider-background {
+	background: var(--potree-scrollbar-track-bg) !important;
+}
+
+.subsubsection {
+	padding: 8px 0 !important;
+}
+
+/* ============================================
+   CATCH-ALL: Force themed text in sidebar (keep original font for GPU info & tool icons)
+   ============================================ */
+
+#potree_sidebar *,
+#potree_sidebar_main * {
+	color: var(--potree-text-color) !important;
+}

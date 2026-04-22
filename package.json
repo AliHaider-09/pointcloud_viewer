@@ -1,0 +1,38 @@
+{
+  "name": "pointcloud_viewer",
+  "version": "1.0.0",
+  "description": "Standalone, embeddable 3D point cloud viewer built on Potree 2.x. WebGPU + WebGL fallback, zero external dependencies, configurable API, theming via CSS variables.",
+  "main": "index.html",
+  "files": [
+    "index.html",
+    "potree-loader.js",
+    "theme-override.css",
+    "src/",
+    "libs/",
+    "resources/"
+  ],
+  "keywords": [
+    "point-cloud",
+    "potree",
+    "3d",
+    "viewer",
+    "lidar",
+    "webgpu",
+    "webgl",
+    "las",
+    "laz"
+  ],
+  "author": "Ali Haider, Saad",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AliHaider-09/pointcloud_viewer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AliHaider-09/pointcloud_viewer/issues"
+  },
+  "homepage": "https://github.com/AliHaider-09/pointcloud_viewer#readme",
+  "engines": {
+    "node": ">=18"
+  }
+}
