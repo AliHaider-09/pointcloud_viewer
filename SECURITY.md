@@ -4,7 +4,7 @@
 
 Please **do not** open a public GitHub issue for security vulnerabilities.
 
-Email us privately at: [your-email@example.com]
+Email us privately at: alihaiderawan1245@gmail.com
 
 Include a description of the issue, steps to reproduce, and potential impact.
 We'll respond within 5 business days.
