@@ -1,10 +1,11 @@
 {
   "name": "@alihaider_719/pointcloud-viewer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Standalone, embeddable 3D point cloud viewer built on Potree 2.x. WebGPU + WebGL fallback, zero external dependencies, configurable API, theming via CSS variables.",
   "main": "index.html",
   "files": [
     "index.html",
+    "demo.html",
     "potree-loader.js",
     "theme-override.css",
     "src/",

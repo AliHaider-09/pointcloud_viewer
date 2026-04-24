@@ -1,29 +1,94 @@
-`markdown
-
 # pointcloud_viewer
 
 Standalone, embeddable 3D point cloud viewer built on Potree 2.x. Drop it in an iframe — no auth, no backend, no build step required.
 
-**WebGPU** on supported browsers, **WebGL** fallback everywhere else. Zero external runtime dependencies.
+**WebGPU** on supported browsers (Chrome/Edge ≥ 113), **WebGL** fallback everywhere else. Zero external runtime dependencies — all libraries bundled locally.
 
 ---
 
 ## Install
 
-bash
-npm install pointcloud_viewer
+```bash
+npm install @alihaider_719/pointcloud-viewer
+```
 
-## Embed
+---
 
-html
+## Important — Must Be Served via HTTP
 
+The viewer uses ES modules and `importmap`, which **do not work when opened as a local file** (`file://`). You must serve the package through an HTTP server.
+
+### Quick local test (no install needed)
+
+```bash
+# Using npx serve
+npx serve node_modules/@alihaider_719/pointcloud-viewer
+
+# Using Python
+python -m http.server 3001 --directory node_modules/@alihaider_719/pointcloud-viewer
+
+# Using Node.js http-server
+npx http-server node_modules/@alihaider_719/pointcloud-viewer -p 3001
+```
+
+Then open in Chrome or Edge:
+
+```
+http://localhost:3001/demo.html
+```
+
+Or load any point cloud directly:
+
+```
+http://localhost:3001/index.html?url=https://your-cdn.com/scan/metadata.json
+```
+
+---
+
+## Embed in a Web App
+
+### Vanilla HTML
+
+```html
 <iframe
- src="/node_modules/pointcloud_viewer/index.html?url=https://cdn.example.com/
-scan/metadata.json"
- width="100%"
- height="600"
- allow="fullscreen"
-│ </iframe>
+  src="/node_modules/@alihaider_719/pointcloud-viewer/index.html?url=https://your-cdn.com/scan/metadata.json"
+  width="100%"
+  height="600"
+  allow="fullscreen"
+></iframe>
+```
+
+> The viewer folder must be reachable at the path you reference. If your app serves `node_modules/` statically, the path above works as-is. Otherwise copy the package to your `public/` or `static/` folder.
+
+### React
+
+```jsx
+export function PointCloudViewer({ url }) {
+  return (
+    <iframe
+      src={`/pointcloud-viewer/index.html?url=${encodeURIComponent(url)}`}
+      style={{ width: '100%', height: '600px', border: 'none' }}
+      allow="fullscreen"
+      title="Point Cloud Viewer"
+    />
+  );
+}
+```
+
+Copy the package into `public/pointcloud-viewer/` so Next.js / Vite serves it statically.
+
+### Vue
+
+```html
+<template>
+  <iframe
+    :src="`/pointcloud-viewer/index.html?url=${encodeURIComponent(url)}`"
+    style="width:100%;height:600px;border:none"
+    allow="fullscreen"
+    title="Point Cloud Viewer"
+  />
+</template>
+```
 
 ---
 
@@ -38,34 +103,31 @@ scan/metadata.json"
 | `authToken`      | Bearer token for cross-origin API calls        | —                  |
 | `parentOrigin`   | Locks postMessage to a specific origin         | `"*"`              |
 | `showBackButton` | Show back navigation button (`1` to enable)    | `0`                |
-| `embedded`       | Deprecated alias for `showBackButton`          | —                  |
 | `fallback`       | Force WebGL renderer (`1` to force)            | `0`                |
 
 ---
 
 ## Events (viewer → parent)
 
-Listen for messages from the viewer in the parent page:
-
-js
-window.addEventListener("message", (e) => {
-if (e.source !== iframe.contentWindow) return;
-switch (e.data?.type) {
-case "potree-ready":
-console.log(Renderer: ${e.data.renderer}); // "webgpu" | "webgl"
-     break;
-   case "potree-error":
-     console.error(${e.data.code}: ${e.data.message});
-break;
-case "potree-measurement-change":
-console.log(e.data.action, e.data.measurement); // "created" | "updated" |
-"deleted"
-break;
-case "potree-navigate-back":
-history.back();
-break;
-}
+```js
+window.addEventListener('message', (e) => {
+  if (e.source !== iframe.contentWindow) return;
+  switch (e.data?.type) {
+    case 'potree-ready':
+      console.log('Renderer:', e.data.renderer); // "webgpu" | "webgl"
+      break;
+    case 'potree-error':
+      console.error(e.data.code, e.data.message);
+      break;
+    case 'potree-measurement-change':
+      console.log(e.data.action, e.data.measurement);
+      break;
+    case 'potree-navigate-back':
+      history.back();
+      break;
+  }
 });
+```
 
 | Event                       | When                                  | Payload                             |
 | --------------------------- | ------------------------------------- | ----------------------------------- |
@@ -76,12 +138,40 @@ break;
 
 ## Messages (parent → viewer)
 
-js
+```js
 // Refresh auth token at runtime
 iframe.contentWindow.postMessage(
-{ type: "potree-set-auth-token", token: "new-token" },
-"https://yourapp.com"
+  { type: 'potree-set-auth-token', token: 'new-token' },
+  'https://yourapp.com'
 );
+```
+
+---
+
+## Measurement Persistence
+
+To persist measurements to your own backend, pass `apiBase`, `projectId`, and `authToken`:
+
+```html
+<iframe src="/pointcloud-viewer/index.html
+  ?url=https://cdn.example.com/scan/metadata.json
+  &apiBase=https://api.example.com
+  &projectId=abc-123
+  &authToken=eyJhbG...
+  &parentOrigin=https://yourapp.com">
+</iframe>
+```
+
+Expected endpoints:
+
+```
+GET    {apiBase}/api/projects/{projectId}/measurements
+POST   {apiBase}/api/projects/{projectId}/measurements
+PATCH  {apiBase}/api/projects/{projectId}/measurements/{id}
+DELETE {apiBase}/api/projects/{projectId}/measurements/{id}
+```
+
+Without `projectId`, measurements work in memory with no API calls.
 
 ---
 
@@ -89,14 +179,15 @@ iframe.contentWindow.postMessage(
 
 Override any of the 15 CSS variables to rebrand the viewer:
 
-css
-/\* Full dark theme example /
+```css
+/* Full dark theme example */
 :root {
---potree-accent-color: #10b981;
---potree-sidebar-bg: rgba(15, 23, 42, 0.88);
---potree-text-color: #f1f5f9;
---potree-font-family: 'Inter', system-ui, sans-serif;
+  --potree-accent-color: #10b981;
+  --potree-sidebar-bg: rgba(15, 23, 42, 0.88);
+  --potree-text-color: #f1f5f9;
+  --potree-font-family: 'Inter', system-ui, sans-serif;
 }
+```
 
 | Variable                      | Purpose                      | Default                            |
 | ----------------------------- | ---------------------------- | ---------------------------------- |
@@ -120,10 +211,10 @@ css
 
 ## Browser Support
 
-| Renderer       | Browsers                         |
-| -------------- | -------------------------------- |
-| WebGPU         | Chrome / Edge ≥ 113, Safari ≥ 18 |
-| WebGL fallback | All modern browsers              |
+| Renderer       | Browsers                              |
+| -------------- | ------------------------------------- |
+| WebGPU         | Chrome / Edge ≥ 113, Safari ≥ 18      |
+| WebGL fallback | All other modern browsers (Firefox, etc.) |
 
 ---
 
@@ -133,10 +224,10 @@ css
 - Viewing tools — RGB, Intensity, Elevation, point size, FPV / Orbit
 - Measurement system — distance, area, point, vertex editing
 - Clip view — volume box, face selection, ortho 2D, interactive gizmo
-- Magnifier cursor, dynamic point budget
+- Magnifier cursor, dynamic point budget, height profile tool
 - All dependencies bundled locally (Three.js, es-module-shims, gl-matrix, proj4, brotli, laz-perf, tween, Poppins)
-- GDPR-compliant — no external font or CDN requests
-- Fully offline-capable
+- GDPR-compliant — no external font or CDN requests at runtime
+- Fully offline-capable once served
 
 ## What's NOT Included
 
@@ -147,35 +238,8 @@ css
 
 ---
 
-## Measurement Persistence
-
-To persist measurements to your own backend, pass `apiBase`, `projectId`, and `authToken`:
-
-html
-
-<iframe src="/nodemodules/pointcloud_viewer/index.html
- ?url=https://cdn.example.com/scan/metadata.json
- &apiBase=https://api.example.com
- &projectId=abc-123
- &authToken=eyJhbG...
- &parentOrigin=https://yourapp.com">
-</iframe>
-
-Expected endpoints:
-
-GET {apiBase}/api/projects/{projectId}/measurements
-POST {apiBase}/api/projects/{projectId}/measurements
-PATCH {apiBase}/api/projects/{projectId}/measurements/{id}
-DELETE {apiBase}/api/projects/{projectId}/measurements/{id}
-
-Without `projectId`, measurements work locally in memory with no API calls.
-
----
-
 ## License
 
 MIT © Ali Haider, Saad
 
 Built on [Potree](https://github.com/potree/potree) · [Three.js](https://threejs.org) · [laz-perf](https://github.com/connormanning/laz-perf)
-
----

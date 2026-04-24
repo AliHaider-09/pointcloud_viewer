@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pointcloud_viewer — Demo</title>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+        background: #1e293b;
+        border-bottom: 1px solid #334155;
+        flex-shrink: 0;
+      }
+      header h1 {
+        font-size: 15px;
+        font-weight: 600;
+        color: #f1f5f9;
+      }
+      header span {
+        font-size: 12px;
+        color: #64748b;
+        font-family: monospace;
+      }
+      .badge {
+        background: #3b82f6;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 999px;
+        margin-left: 10px;
+      }
+      iframe {
+        flex: 1;
+        width: 100%;
+        border: none;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <h1>pointcloud_viewer</h1>
+        <span class="badge">Demo</span>
+      </div>
+      <span>Demo Point Cloud — CloudFront CDN</span>
+    </header>
+
+    <iframe
+      id="viewer"
+      src="./index.html?url=https://doaw3y9l39tha.cloudfront.net/uploads/project_c37ec020-aa9e-4b71-8ec8-2b28918bb486/tiles/pointclouds/false/metadata.json&name=Demo%20Point%20Cloud"
+      allow="fullscreen"
+      title="Point Cloud Viewer Demo"
+    ></iframe>
+
+    <script>
+      window.addEventListener('message', function (e) {
+        if (e.source !== document.getElementById('viewer').contentWindow) return;
+        if (e.data?.type === 'potree-ready') {
+          console.log('[Demo] Viewer ready — renderer:', e.data.renderer);
+        }
+        if (e.data?.type === 'potree-error') {
+          console.error('[Demo] Viewer error:', e.data.code, e.data.message);
+        }
+      });
+    </script>
+  </body>
+</html>
